@@ -398,16 +398,20 @@
         return "BUS";
       }
 
-      if (departure.platform) {
-        return departure.platform;
+      // Corrected:
+      // 15206 = Inbound
+      // 15205 = Outbound
+      // This overrides the API platform field in case the API has the old labels.
+      if (String(departure.stopId) === "15206") {
+        return "Inbound";
       }
 
-      if (departure.stopId === "15206") {
+      if (String(departure.stopId) === "15205") {
         return "Outbound";
       }
 
-      if (departure.stopId === "15205") {
-        return "Inbound";
+      if (departure.platform) {
+        return departure.platform;
       }
 
       return "—";
