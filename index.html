@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Judah & 28th Ave Departures</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #050505;
+      color: #ffd400;
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+      padding: 18px;
+    }
+
+    .board {
+      max-width: 1000px;
+      margin: 0 auto;
+      border: 4px solid #222;
+      border-radius: 18px;
+      background: #0b0b0b;
+      box-shadow: 0 0 30px rgba(255, 212, 0, 0.12);
+      overflow: hidden;
+    }
+
+    .header {
+      background: #ffd400;
+      color: #000;
+      padding: 18px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      font-weight: 700;
+      opacity: 0.8;
+      margin-top: 3px;
+    }
+
+    .live {
+      background: #000;
+      color: #ffd400;
+      padding: 8px 13px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      background: #ff2b2b;
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .info-bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      border-bottom: 1px solid #2a2a2a;
+      color: #aaa;
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+
+    .departures {
+      width: 100%;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 90px 1.2fr 1fr 130px 110px;
+      gap: 12px;
+      padding: 16px 18px;
+      border-bottom: 1px solid #1d1d1d;
+      align-items: center;
+    }
+
+    .row.headings {
+      color: #888;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+      background: #080808;
+    }
+
+    .route {
+      background: #ffd400;
+      color: #000;
+      font-size: 24px;
+      font-weight: 900;
+      text-align: center;
+      padding: 8px 10px;
+      border-radius: 10px;
+      min-width: 60px;
+    }
+
+    .destination {
+      font-size: 24px;
+      font-weight: 900;
+      color: #ffd400;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .platform {
+      font-size: 17px;
+      font-weight: 700;
+      color: #eee;
+    }
+
+    .time {
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .mins {
+      font-size: 26px;
+      font-weight: 900;
+      color: #ffd400;
+      text-align: right;
+    }
+
+    .due {
+      color: #00ff88;
+    }
+
+    .empty,
+    .error {
+      padding: 38px 22px;
+      text-align: center;
+      color: #aaa;
+      font-size: 18px;
+    }
+
+    .error {
+      color: #ff6b6b;
+    }
+
+    .small {
+      font-size: 12px;
+      color: #888;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 750px) {
+      body {
+        padding: 10px;
+      }
+
+      .title {
+        font-size: 22px;
+      }
+
+      .row {
+        grid-template-columns: 70px 1fr 80px;
+        grid-template-areas:
+          "route destination mins"
+          "route platform time";
+        gap: 6px 10px;
+      }
+
+      .row.headings {
+        display: none;
+      }
+
+      .route {
+        grid-area: route;
+        font-size: 20px;
+      }
+
+      .destination {
+        grid-area: destination;
+        font-size: 20px;
+      }
+
+      .platform {
+        grid-area: platform;
+        font-size: 14px;
+      }
+
+      .time {
+        grid-area: time;
+        font-size: 14px;
+        text-align: right;
+        color: #aaa;
+      }
+
+      .mins {
+        grid-area: mins;
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="board">
+    <header class="header">
+      <div>
+        <div class="title">Judah & 28th Ave</div>
+        <div class="subtitle">Live SFMTA departures</div>
+      </div>
+
+      <div class="live">
+        <span class="dot"></span>
+        LIVE
+      </div>
+    </header>
+
+    <section class="info-bar">
+      <div id="status">Loading departures…</div>
+      <div id="updated">Updated: —</div>
+    </section>
+
+    <section class="departures">
+      <div class="row headings">
+        <div>Route</div>
+        <div>Destination</div>
+        <div>Platform</div>
+        <div>Expected</div>
+        <div style="text-align:right;">Departs</div>
+      </div>
+
+      <div id="departuresList">
+        <div class="empty">Loading…</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const API_URL = "https://judah-28th-api.261bayley.workers.dev/";
+    const REFRESH_EVERY_MS = 15000;
+
+    const departuresList = document.getElementById("departuresList");
+    const statusEl = document.getElementById("status");
+    const updatedEl = document.getElementById("updated");
+
+    async function loadDepartures() {
+      try {
+        statusEl.textContent = "Fetching live departures…";
+
+        const response = await fetch(API_URL, {
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          throw new Error(`API returned HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data.ok) {
+          throw new Error(data.error || "API returned ok: false");
+        }
+
+        renderDepartures(data.departures || []);
+
+        const generatedAt = data.generatedAt
+          ? new Date(data.generatedAt)
+          : new Date();
+
+        updatedEl.textContent = `Updated: ${generatedAt.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        })}`;
+
+        statusEl.textContent = `${data.count || 0} upcoming departures`;
+
+      } catch (error) {
+        console.error(error);
+
+        departuresList.innerHTML = `
+          <div class="error">
+            Could not load departures.
+            <div class="small">${escapeHtml(error.message)}</div>
+          </div>
+        `;
+
+        statusEl.textContent = "Connection error";
+        updatedEl.textContent = "Updated: —";
+      }
+    }
+
+    function renderDepartures(departures) {
+      const validDepartures = departures
+        .filter(d => d && d.expectedDeparture)
+        .sort((a, b) => {
+          const aTime = new Date(a.expectedDeparture).getTime();
+          const bTime = new Date(b.expectedDeparture).getTime();
+          return aTime - bTime;
+        })
+        .slice(0, 12);
+
+      if (validDepartures.length === 0) {
+        departuresList.innerHTML = `
+          <div class="empty">
+            No live departures found right now.
+            <div class="small">SFMTA data may take a few seconds to appear.</div>
+          </div>
+        `;
+        return;
+      }
+
+      departuresList.innerHTML = validDepartures.map(departure => {
+        const expected = new Date(departure.expectedDeparture);
+        const minutes = getMinutesAway(expected);
+
+        const route = departure.route || "—";
+        const destination = departure.destination || "Unknown";
+        const platform = formatPlatform(departure);
+        const expectedTime = expected.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+
+        return `
+          <div class="row">
+            <div class="route">${escapeHtml(route)}</div>
+            <div class="destination">${escapeHtml(destination)}</div>
+            <div class="platform">${escapeHtml(platform)}</div>
+            <div class="time">${escapeHtml(expectedTime)}</div>
+            <div class="mins ${minutes <= 1 ? "due" : ""}">
+              ${formatMinutes(minutes)}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function getMinutesAway(date) {
+      const diffMs = date.getTime() - Date.now();
+      return Math.max(0, Math.round(diffMs / 60000));
+    }
+
+    function formatMinutes(minutes) {
+      if (minutes <= 0) return "Due";
+      if (minutes === 1) return "1 min";
+      return `${minutes} min`;
+    }
+
+    function formatPlatform(departure) {
+      const route = String(departure.route || "").toUpperCase();
+
+      if (route.includes("BUS") || route.includes("OWL")) {
+        return "BUS";
+      }
+
+      if (departure.platform) {
+        return departure.platform;
+      }
+
+      if (departure.stopId === "15206") {
+        return "Outbound";
+      }
+
+      if (departure.stopId === "15205") {
+        return "Inbound";
+      }
+
+      return "—";
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    loadDepartures();
+    setInterval(loadDepartures, REFRESH_EVERY_MS);
+  </script>
+</body>
+</html>
