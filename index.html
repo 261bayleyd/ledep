@@ -10,146 +10,160 @@
       box-sizing: border-box;
     }
 
-    body {
+    html, body {
       margin: 0;
+      width: 100%;
+      height: 100%;
       background: #050505;
       color: #ffd400;
       font-family: Arial, Helvetica, sans-serif;
-      min-height: 100vh;
-      padding: 18px;
+      overflow: hidden;
+    }
+
+    body {
+      padding: 10px;
     }
 
     .board {
-      max-width: 1000px;
-      margin: 0 auto;
-      border: 4px solid #222;
+      width: 100%;
+      height: 100%;
+      border: 3px solid #222;
       border-radius: 18px;
-      background: #0b0b0b;
-      box-shadow: 0 0 30px rgba(255, 212, 0, 0.12);
+      background: #080808;
+      box-shadow: 0 0 35px rgba(255, 212, 0, 0.14);
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .header {
       background: #ffd400;
       color: #000;
-      padding: 18px 22px;
+      padding: 10px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
+      flex-shrink: 0;
     }
 
     .title {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 900;
       letter-spacing: -0.5px;
+      line-height: 1;
     }
 
     .subtitle {
-      font-size: 14px;
-      font-weight: 700;
-      opacity: 0.8;
+      font-size: 12px;
+      font-weight: 800;
+      opacity: 0.75;
       margin-top: 3px;
     }
 
     .live {
       background: #000;
       color: #ffd400;
-      padding: 8px 13px;
+      padding: 7px 12px;
       border-radius: 999px;
       font-weight: 900;
-      font-size: 14px;
+      font-size: 13px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
     }
 
     .dot {
-      width: 9px;
-      height: 9px;
+      width: 8px;
+      height: 8px;
       background: #ff2b2b;
       border-radius: 50%;
-      display: inline-block;
       animation: pulse 1.2s infinite;
     }
 
     @keyframes pulse {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
+      50% { opacity: 0.25; }
     }
 
     .info-bar {
+      padding: 7px 14px;
+      border-bottom: 1px solid #222;
+      color: #aaa;
+      font-size: 11px;
       display: flex;
       justify-content: space-between;
-      gap: 12px;
-      padding: 12px 18px;
-      border-bottom: 1px solid #2a2a2a;
-      color: #aaa;
-      font-size: 13px;
-      flex-wrap: wrap;
+      flex-shrink: 0;
     }
 
     .departures {
-      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
 
     .row {
+      flex: 1;
       display: grid;
-      grid-template-columns: 90px 1.2fr 1fr 130px 110px;
-      gap: 12px;
-      padding: 16px 18px;
-      border-bottom: 1px solid #1d1d1d;
+      grid-template-columns: 86px 1fr 112px;
+      gap: 14px;
+      padding: 10px 16px;
+      border-bottom: 1px solid #1e1e1e;
       align-items: center;
+      min-height: 0;
     }
 
-    .row.headings {
-      color: #888;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      padding-top: 12px;
-      padding-bottom: 12px;
-      background: #080808;
+    .row:last-child {
+      border-bottom: none;
     }
 
     .route {
       background: #ffd400;
       color: #000;
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 900;
       text-align: center;
-      padding: 8px 10px;
-      border-radius: 10px;
-      min-width: 60px;
+      padding: 9px 8px;
+      border-radius: 13px;
+      min-width: 64px;
+      box-shadow: 0 0 18px rgba(255, 212, 0, 0.14);
+    }
+
+    .route.n-route {
+      background: #005bbb;
+      color: white;
+      box-shadow: 0 0 22px rgba(0, 91, 187, 0.45);
+    }
+
+    .main {
+      min-width: 0;
     }
 
     .destination {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 900;
       color: #ffd400;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      line-height: 1.05;
     }
 
-    .platform {
-      font-size: 17px;
-      font-weight: 700;
-      color: #eee;
-    }
-
-    .time {
-      font-size: 22px;
-      font-weight: 900;
-      color: #fff;
+    .details {
+      margin-top: 5px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #aaa;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .mins {
-      font-size: 26px;
+      font-size: 30px;
       font-weight: 900;
       color: #ffd400;
       text-align: right;
+      white-space: nowrap;
     }
 
     .due {
@@ -158,68 +172,62 @@
 
     .empty,
     .error {
-      padding: 38px 22px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-align: center;
+      padding: 22px;
       color: #aaa;
-      font-size: 18px;
+      font-size: 20px;
+      font-weight: 800;
     }
 
     .error {
       color: #ff6b6b;
     }
 
-    .small {
-      font-size: 12px;
-      color: #888;
-      margin-top: 8px;
-    }
-
-    @media (max-width: 750px) {
+    @media (max-height: 430px) {
       body {
-        padding: 10px;
+        padding: 7px;
+      }
+
+      .header {
+        padding: 8px 14px;
       }
 
       .title {
-        font-size: 22px;
+        font-size: 21px;
       }
 
-      .row {
-        grid-template-columns: 70px 1fr 80px;
-        grid-template-areas:
-          "route destination mins"
-          "route platform time";
-        gap: 6px 10px;
-      }
-
-      .row.headings {
+      .subtitle {
         display: none;
       }
 
+      .info-bar {
+        padding: 5px 12px;
+      }
+
+      .row {
+        padding: 8px 14px;
+        grid-template-columns: 76px 1fr 104px;
+      }
+
       .route {
-        grid-area: route;
-        font-size: 20px;
+        font-size: 23px;
+        padding: 7px;
       }
 
       .destination {
-        grid-area: destination;
-        font-size: 20px;
+        font-size: 25px;
       }
 
-      .platform {
-        grid-area: platform;
-        font-size: 14px;
-      }
-
-      .time {
-        grid-area: time;
-        font-size: 14px;
-        text-align: right;
-        color: #aaa;
+      .details {
+        font-size: 12px;
       }
 
       .mins {
-        grid-area: mins;
-        font-size: 22px;
+        font-size: 27px;
       }
     }
   </style>
@@ -240,28 +248,19 @@
     </header>
 
     <section class="info-bar">
-      <div id="status">Loading departures…</div>
+      <div id="status">Loading…</div>
       <div id="updated">Updated: —</div>
     </section>
 
-    <section class="departures">
-      <div class="row headings">
-        <div>Route</div>
-        <div>Destination</div>
-        <div>Platform</div>
-        <div>Expected</div>
-        <div style="text-align:right;">Departs</div>
-      </div>
-
-      <div id="departuresList">
-        <div class="empty">Loading…</div>
-      </div>
+    <section class="departures" id="departuresList">
+      <div class="empty">Loading departures…</div>
     </section>
   </main>
 
   <script>
     const API_URL = "https://judah-28th-api.261bayley.workers.dev/";
     const REFRESH_EVERY_MS = 15000;
+    const MAX_DEPARTURES = 3;
 
     const departuresList = document.getElementById("departuresList");
     const statusEl = document.getElementById("status");
@@ -291,21 +290,17 @@
           ? new Date(data.generatedAt)
           : new Date();
 
-        updatedEl.textContent = `Updated: ${generatedAt.toLocaleTimeString([], {
+        updatedEl.textContent = `Updated ${generatedAt.toLocaleTimeString([], {
           hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit"
+          minute: "2-digit"
         })}`;
-
-        statusEl.textContent = `${data.count || 0} upcoming departures`;
 
       } catch (error) {
         console.error(error);
 
         departuresList.innerHTML = `
           <div class="error">
-            Could not load departures.
-            <div class="small">${escapeHtml(error.message)}</div>
+            Could not load departures
           </div>
         `;
 
@@ -318,17 +313,16 @@
       const validDepartures = departures
         .filter(d => d && d.expectedDeparture)
         .sort((a, b) => {
-          const aTime = new Date(a.expectedDeparture).getTime();
-          const bTime = new Date(b.expectedDeparture).getTime();
-          return aTime - bTime;
+          return new Date(a.expectedDeparture) - new Date(b.expectedDeparture);
         })
-        .slice(0, 12);
+        .slice(0, MAX_DEPARTURES);
+
+      statusEl.textContent = `${validDepartures.length} next departures`;
 
       if (validDepartures.length === 0) {
         departuresList.innerHTML = `
           <div class="empty">
-            No live departures found right now.
-            <div class="small">SFMTA data may take a few seconds to appear.</div>
+            No live departures right now
           </div>
         `;
         return;
@@ -339,7 +333,8 @@
         const minutes = getMinutesAway(expected);
 
         const route = departure.route || "—";
-        const destination = departure.destination || "Unknown";
+        const routeClass = isNRoute(route) ? "n-route" : "";
+        const destination = formatDestination(departure.destination);
         const platform = formatPlatform(departure);
         const expectedTime = expected.toLocaleTimeString([], {
           hour: "2-digit",
@@ -348,16 +343,41 @@
 
         return `
           <div class="row">
-            <div class="route">${escapeHtml(route)}</div>
-            <div class="destination">${escapeHtml(destination)}</div>
-            <div class="platform">${escapeHtml(platform)}</div>
-            <div class="time">${escapeHtml(expectedTime)}</div>
+            <div class="route ${routeClass}">${escapeHtml(route)}</div>
+
+            <div class="main">
+              <div class="destination">${escapeHtml(destination)}</div>
+              <div class="details">${escapeHtml(platform)} • ${escapeHtml(expectedTime)}</div>
+            </div>
+
             <div class="mins ${minutes <= 1 ? "due" : ""}">
               ${formatMinutes(minutes)}
             </div>
           </div>
         `;
       }).join("");
+    }
+
+    function isNRoute(route) {
+      return String(route).trim().toUpperCase() === "N";
+    }
+
+    function formatDestination(destination) {
+      const text = String(destination || "Unknown").trim();
+      const lower = text.toLowerCase();
+
+      if (lower.includes("la playa")) {
+        return "Ocean Beach";
+      }
+
+      if (
+        lower.includes("4th") &&
+        (lower.includes("king") || lower.includes("king st"))
+      ) {
+        return "Caltrain/Ballpark";
+      }
+
+      return text;
     }
 
     function getMinutesAway(date) {
